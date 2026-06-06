@@ -7,8 +7,13 @@ import Intro from '@/components/Intro';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ProductGrid from '@/components/ProductGrid';
+import CollectionBanner from '@/components/CollectionBanner';
+import CharsStrip from '@/components/CharsStrip';
+import Newsletter from '@/components/Newsletter';
 import Cart from '@/components/Cart';
 import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
+import Particles from '@/components/Particles';
 
 export default function Home() {
   const [hasEntered, setHasEntered] = useState(false);
@@ -49,13 +54,16 @@ export default function Home() {
   return (
     <main>
       <CustomCursor />
+      <ScrollReveal />
+      <Particles />
       
       {!hasEntered && (
         <Intro onEnter={() => setHasEntered(true)} />
       )}
 
       {hasEntered && (
-        <div className="main-content fade-in">
+        <div id="main-content" className="fade-in">
+          <div className="noise-overlay"></div>
           <Navbar 
             onOpenCart={() => setIsCartOpen(true)} 
             cartCount={cartCount} 
@@ -65,29 +73,18 @@ export default function Home() {
           
           <ProductGrid onAddToCart={handleAddToCart} />
           
-          <section className="about-section" id="about">
-            <div className="about-container">
-              <div className="about-text">
-                <h2>BEYOND THE VOID</h2>
-                <p>
-                  RE:SET VOID Edition is not just a collection; it's a domain expansion in the realm of street culture. 
-                  Drawing inspiration from the cursed energy of Jujutsu Kaisen, every stitch is infused with intent.
-                </p>
-                <div className="about-stats">
-                  <div className="stat">
-                    <span>8</span>
-                    <p>ARTIFACTS</p>
-                  </div>
-                  <div className="stat">
-                    <span>∞</span>
-                    <p>ENERGY</p>
-                  </div>
-                </div>
-              </div>
-              <div className="about-image-glitch"></div>
+          <CollectionBanner />
+          <CharsStrip />
+          
+          <section className="about" id="about">
+            <div className="about-content">
+                <h2>BEYOND THE <span className="highlight-text">VOID</span></h2>
+                <p>RE:SET VOID Edition is not just a collection; it&apos;s a domain expansion in the realm of street culture. Drawing inspiration from the cursed energy of Jujutsu Kaisen, every stitch is infused with intent.</p>
+                <a href="#" className="btn btn-outline">READ OUR STORY</a>
             </div>
           </section>
 
+          <Newsletter />
           <Footer />
 
           <Cart 

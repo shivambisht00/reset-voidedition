@@ -19,52 +19,50 @@ export default function Cart({ isOpen, onClose, items, onRemove, onUpdateQuantit
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className={`cart-sidebar ${isOpen ? 'open' : ''}`}>
-      <div className="cart-header">
-        <h3>YOUR DOMAIN</h3>
-        <button className="close-cart" onClick={onClose}>×</button>
-      </div>
-
-      <div className="cart-items">
-        {items.length === 0 ? (
-          <div className="empty-cart">EMPTY VOID</div>
-        ) : (
-          items.map((item) => (
-            <div key={item.id} className="cart-item">
-              <div className="cart-item-img">
-                <Image src={item.image} alt={item.name} width={60} height={80} />
-              </div>
-              <div className="cart-item-info">
-                <h4>{item.name}</h4>
-                <p>Rs.{item.price}</p>
-                <div className="quantity-controls">
-                  <button onClick={() => onUpdateQuantity(item.id, -1)}>-</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => onUpdateQuantity(item.id, 1)}>+</button>
+    <>
+      <div className={`cart-overlay ${isOpen ? 'open' : ''}`} onClick={onClose}></div>
+      <div className={`cart-sidebar ${isOpen ? 'open' : ''}`} id="cartSidebar">
+        <div className="cart-header">
+            <h3>CURSED CART</h3>
+            <button className="cart-close" id="cartClose" onClick={onClose}>x</button>
+        </div>
+        <div className="cart-items" id="cartItems">
+            {items.length === 0 ? (
+                <div className="cart-empty">
+                    <div className="empty-icon">呪</div>
+                    <p>Your cart is empty, sorcerer.</p>
+                    <button className="btn btn-ghost" onClick={onClose}>SHOP NOW</button>
                 </div>
-              </div>
-              <button 
-                className="remove-item" 
-                onClick={() => onRemove(item.id)}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                </svg>
-              </button>
+            ) : (
+                items.map(item => (
+                <div key={item.id} className="cart-item">
+                    <div className="cart-item-img">
+                        <Image src={item.image} alt={item.name} width={60} height={80} style={{ objectFit: 'cover', width: '60px', height: '80px', borderRadius: '4px' }} />
+                    </div>
+                    <div className="cart-item-info">
+                        <h4>{item.name}</h4>
+                        <p className="cart-item-price">Rs.{item.price}</p>
+                        <div className="cart-item-qty">
+                            <button onClick={() => onUpdateQuantity(item.id, -1)}>-</button>
+                            <span>{item.quantity}</span>
+                            <button onClick={() => onUpdateQuantity(item.id, 1)}>+</button>
+                            <button className="cart-item-remove" onClick={() => onRemove(item.id)}>Remove</button>
+                        </div>
+                    </div>
+                </div>
+                ))
+            )}
+        </div>
+        {items.length > 0 && (
+            <div className="cart-footer" id="cartFooter">
+                <div className="cart-total">
+                    <span>TOTAL</span>
+                    <span id="cartTotal">Rs.{total}</span>
+                </div>
+                <button className="btn btn-primary" style={{ width: '100%' }}>CHECKOUT</button>
             </div>
-          ))
         )}
       </div>
-
-      <div className="cart-footer">
-        <div className="cart-total">
-          <span>TOTAL:</span>
-          <span>Rs. {total}</span>
-        </div>
-        <button className="checkout-btn" disabled={items.length === 0}>
-          INITIATE CHECKOUT
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
