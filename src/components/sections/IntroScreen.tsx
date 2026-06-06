@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface IntroScreenProps {
   onEnter: () => void;
@@ -8,10 +8,11 @@ interface IntroScreenProps {
 
 export default function IntroScreen({ onEnter }: IntroScreenProps) {
   const [videoStarted, setVideoStarted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleEnter = () => {
     setVideoStarted(true);
-    const video = document.getElementById('intro-video') as HTMLVideoElement;
+    const video = videoRef.current;
     if (video && video.querySelector('source')) {
       video.style.display = 'block';
       video.play().catch(() => onEnter());
@@ -22,6 +23,14 @@ export default function IntroScreen({ onEnter }: IntroScreenProps) {
     }
   };
 
+  const handleSkip = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+    }
+    onEnter();
+  };
+
   return (
     <div id="intro-container">
       <div id="enter-screen" style={{ display: videoStarted ? 'none' : 'flex' }}>
@@ -30,9 +39,17 @@ export default function IntroScreen({ onEnter }: IntroScreenProps) {
         <p>JUJUTSU KAISEN × RE:SET</p>
         <button id="enter-btn" onClick={handleEnter}>ENTER DOMAIN</button>
       </div>
-      <video id="intro-video" playsInline style={{ display: 'none' }}>
+      <video id="intro-video" ref={videoRef} playsInline style={{ display: 'none' }}>
         <source src="/images/WhatsApp Video 2026-06-01 at 11.43.29.mp4" type="video/mp4" />
       </video>
+      <button
+        id="skip-intro-btn"
+        type="button"
+        onClick={handleSkip}
+        style={{ display: videoStarted ? 'inline-flex' : 'none' }}
+      >
+        SKIP INTRO
+      </button>
 
       <style jsx>{`
         #intro-container {
@@ -81,6 +98,30 @@ export default function IntroScreen({ onEnter }: IntroScreenProps) {
         #intro-video {
           position: absolute; top: 0; left: 0;
           width: 100%; height: 100%; object-fit: cover;
+        }
+        #skip-intro-btn {
+          position: absolute; right: 28px; bottom: 28px; z-index: 20;
+          align-items: center; justify-content: center;
+          min-width: 138px; min-height: 42px; padding: 12px 20px;
+          font-family: var(--font-display); font-size: 0.72rem;
+          letter-spacing: 0.22em; color: var(--white);
+          background: rgba(0, 0, 0, 0.52);
+          border: 1px solid rgba(255, 255, 255, 0.72);
+          border-radius: 2px; cursor: pointer;
+          backdrop-filter: blur(8px);
+          transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+        #skip-intro-btn:hover {
+          background: rgba(127, 90, 240, 0.28);
+          border-color: var(--purple-light);
+          box-shadow: var(--glow-purple);
+        }
+        @media (max-width: 600px) {
+          #skip-intro-btn {
+            right: 16px; bottom: 18px;
+            min-width: 124px; min-height: 40px;
+            padding: 11px 16px; font-size: 0.66rem;
+          }
         }
       `}</style>
     </div>
